@@ -73,6 +73,8 @@ async function runPickleballAutobooker(
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
   await finishButton.click();
+
+  await browser.close();
 }
 
 module.exports = { runPickleballAutobooker };

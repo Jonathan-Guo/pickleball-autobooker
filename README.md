@@ -58,6 +58,3 @@ LIFETIME_PASSWORD={your password}
 ```bash
 npm start
 ```
-
-
-````

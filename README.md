@@ -38,8 +38,6 @@ git clone https://github.com/yourusername/pickleball-autobooker.git
 cd pickleball-autobooker
 ```
 
----
-
 ### 2. Install dependencies
 ```bash
 npm install

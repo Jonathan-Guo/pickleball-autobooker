@@ -36,7 +36,7 @@ Follow these steps to get the project running locally:
 ```bash
 git clone https://github.com/yourusername/pickleball-autobooker.git
 cd pickleball-autobooker
-
+```bash
 After cloning the repo, run the following commands to fully set up your local environment:
 
 **### 2. Install dependencies**

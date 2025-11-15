@@ -39,18 +39,21 @@ cd pickleball-autobooker
 
 After cloning the repo, run the following commands to fully set up your local environment:
 
-1. Install dependencies
+**### 2. Install dependencies**
+```bash
 npm install
 
-2. Install Playwright browsers
+**### 3. Install Playwright browsers**
+```bash
 npx playwright install
 
-3. Create your .env file and add in these two properties
-
+**### 4. Create your .env file and add in these two properties **
+```bash
 LIFETIME_USERNAME={your email}
 LIFETIME_PASSWORD={your password}
 
-4. Run the bot
+**### 5. Run the bot**
+```bash
 npm start
 
 

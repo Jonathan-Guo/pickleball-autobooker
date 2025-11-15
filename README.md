@@ -39,22 +39,26 @@ cd pickleball-autobooker
 ```
 
 ### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Install Playwright browsers
+
 ```bash
 npx playwright install
 ```
 
 ### 4. Create your .env file and add in these two properties
+
 ```bash
 LIFETIME_USERNAME={your email}
 LIFETIME_PASSWORD={your password}
 ```
 
 ### 5. Run the bot
+
 ```bash
 npm start
 ```

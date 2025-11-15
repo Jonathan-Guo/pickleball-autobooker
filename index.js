@@ -5,6 +5,7 @@ const { runPickleballAutobooker } = require("./pickleballAutoBooker");
     "Monday",
     "8:00",
     "AM",
-    "Pickleball Open Play: All Levels"
+    "Pickleball Open Play: All Levels",
+    "centreville"
   );
 })();

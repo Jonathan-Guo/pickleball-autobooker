@@ -33,29 +33,33 @@ Follow these steps to get the project running locally:
 
 ### 1. Clone the repository
 
-````bash
+```bash
 git clone https://github.com/yourusername/pickleball-autobooker.git
 cd pickleball-autobooker
+```
 
 ---
 
 ### 2. Install dependencies
 ```bash
 npm install
+```
 
 ### 3. Install Playwright browsers
 ```bash
 npx playwright install
+```
 
 ### 4. Create your .env file and add in these two properties
 ```bash
 LIFETIME_USERNAME={your email}
 LIFETIME_PASSWORD={your password}
+```
 
-**### 5. Run the bot**
+### 5. Run the bot
 ```bash
 npm start
-
+```
 
 
 ````

@@ -1,3 +1,8 @@
+const fs = require('fs');
+const output = fs.createWriteStream('./stdout.log');
+const errorOutput = fs.createWriteStream('./stderr.log');
+const logger = new console.Console(output, errorOutput);
+
 // pickleballAutobooker.js
 require("dotenv").config();
 const { chromium } = require("playwright");
@@ -41,6 +46,7 @@ async function runPickleballAutobooker(
   await page.waitForURL(
     `https://my.lifetime.life/clubs/va/${clubLocation}.html`
   );
+  logger.log('Navigated to Lifetime website at', clubLocation);
 
   // navigate to pickleball open play schedule next week
   await page.click('a.nav-link.dropdown-toggle[aria-label="Schedules "]');
@@ -48,6 +54,7 @@ async function runPickleballAutobooker(
     `a.dropdown-item[href="/clubs/va/${clubLocation}/classes.html?teamMemberView=true&mode=week&interest=Pickleball+Open+Play"]`
   );
   await page.click("button.planner-date-btn-next");
+  logger.log('Clicked Pickleball Open Play Schedule');
 
   const day = dayMap[dayName];
   const dayColumn = page.locator(".day").nth(day);
@@ -62,17 +69,20 @@ async function runPickleballAutobooker(
     .locator(`a[data-testid="classLink"]:has-text("${className}")`)
     .click();
 
+  logger.log('Found classBlock info with startTime', startTime, ampm, className);
   // click reserve button
   const reserveButton = page
     .locator('button[data-testid="reserveButton"]')
     .nth(1);
   await reserveButton.waitFor({ state: "visible", timeout: 0 });
   await reserveButton.click();
+  logger.log('Clicked reserve button');
 
   // click finish button
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
   await finishButton.click();
+  logger.log('Closing browser. Success!');
 
   await browser.close();
 }

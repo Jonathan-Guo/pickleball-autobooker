@@ -40,5 +40,5 @@ jobs:
         run: npm start
         env:
           # Dynamically pulls USER_1_EMAIL, USER_2_EMAIL, etc. based on the matrix index
-          USER_EMAIL: ${{ secrets[format('USER_{0}_EMAIL', matrix.account_id)] }}
-          USER_PASSWORD: ${{ secrets[format('USER_{0}_PASSWORD', matrix.account_id)] }}
+          LIFETIME_USERNAME: ${{ secrets[format('USER_{0}_EMAIL', matrix.account_id)] }}
+          LIFETIME_PASSWORD: ${{ secrets[format('USER_{0}_PASSWORD', matrix.account_id)] }}

@@ -20,15 +20,37 @@ const dayMap = {
 
 
 async function clear_screen(page) {
-  // Close cookie preferences if visible
-  if (await page.locator('#onetrust-close-btn-container > button').isVisible()) {
-      await page.locator('#onetrust-close-btn-container > button').click();
-  }
+  try {
+    // 1. Physically delete the cookie banner and its background filters from the HTML
+    await page.evaluate(() => {
+      const selectors = [
+        '#onetrust-consent-sdk',        // The main cookie container
+        '#onetrust-banner-sdk',         // Alternative banner ID
+        '.onetrust-pc-dark-filter',     // The "grey out" overlay
+        '.ot-sdk-row',                  // Specific SDK rows
+        '#onetrust-style'               // The CSS that might be locking the scroll
+      ];
+      
+      selectors.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) {
+          el.remove(); // This removes it from the browser memory for this session
+        }
+      });
 
-  // Close alert notification if visible
-  const alertBtn = page.locator('#alert-notification-edb12dcf-fe52-4c04-9d29-fd99ccce5280 > div > button');
-  if (await alertBtn.isVisible()) {
-      await alertBtn.click();
+      // Re-enable scrolling on the body just in case the banner locked it
+      document.body.style.overflow = 'auto';
+    });
+
+    // 2. Handle the specific alert notification button if it exists
+    const alertBtn = page.locator('button[aria-label="Close alert"], #alert-notification-edb12dcf-fe52-4c04-9d29-fd99ccce5280 button');
+    if (await alertBtn.count() > 0 && await alertBtn.first().isVisible()) {
+        await alertBtn.first().click();
+    }
+    
+    logger.log('DOM cleared: OneTrust and alerts removed.');
+  } catch (err) {
+    logger.log('Clear screen skipped or failed (non-critical):', err.message);
   }
 }
 

@@ -85,13 +85,13 @@ async function runPickleballAutobooker(
     .locator('button[data-testid="reserveButton"]')
     .nth(1);
   await reserveButton.waitFor({ state: "visible", timeout: 0 });
-  await reserveButton.click();
+  await reserveButton.click({ force: true });
   logger.log('Clicked reserve button');
 
   // click finish button
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
-  await finishButton.click();
+  await finishButton.click({ force: true });
   await page.getByText("Your reservation is complete.").isVisible();
 
   //navigate to View All Reservations to allow async booking

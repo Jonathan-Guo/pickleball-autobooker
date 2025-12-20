@@ -61,8 +61,7 @@ async function runPickleballAutobooker(
     `https://my.lifetime.life/clubs/va/${clubLocation}.html`
   );
   logger.log('Navigated to Lifetime website at', clubLocation);
-  await clear_screen();
-  
+  await clear_screen(page);  
   // navigate to pickleball open play schedule next week
   await page.click('a.nav-link.dropdown-toggle[aria-label="Schedules "]');
   await page.click(

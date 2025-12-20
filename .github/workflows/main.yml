@@ -16,10 +16,6 @@ jobs:
         # Add a number for every account you want to run
         account_id: [1, 2]
 
-    defaults:
-      run:
-        working-directory: ./pickleball-autobooker
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

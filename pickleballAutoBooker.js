@@ -46,7 +46,7 @@ async function runPickleballAutobooker(
   className,
   clubLocation
 ) {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
   // go to club homepage and login

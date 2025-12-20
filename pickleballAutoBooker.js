@@ -46,7 +46,7 @@ async function runPickleballAutobooker(
   className,
   clubLocation
 ) {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
 
   // go to club homepage and login
@@ -90,14 +90,14 @@ async function runPickleballAutobooker(
     .locator('button[data-testid="reserveButton"]')
     .nth(1);
   await reserveButton.waitFor({ state: "visible", timeout: 0 });
-  await reserveButton.click({ force: true });
+  await reserveButton.click();
   logger.log('Clicked reserve button');
 
   // click finish button
   await clear_screen(page);
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
-  await finishButton.click({ force: true });
+  await finishButton.click();
   await page.getByText("Your reservation is complete.").isVisible();
 
   //navigate to View All Reservations to allow async booking

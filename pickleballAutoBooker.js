@@ -48,6 +48,16 @@ async function runPickleballAutobooker(
   );
   logger.log('Navigated to Lifetime website at', clubLocation);
 
+  // Close cookie preferences if visible
+  if (await page.locator('#onetrust-close-btn-container > button').isVisible()) {
+      await page.locator('#onetrust-close-btn-container > button').click();
+  }
+
+  // Close alert notification if visible
+  const alertBtn = page.locator('#alert-notification-edb12dcf-fe52-4c04-9d29-fd99ccce5280 > div > button');
+  if (await alertBtn.isVisible()) {
+      await alertBtn.click();
+  }
   // navigate to pickleball open play schedule next week
   await page.click('a.nav-link.dropdown-toggle[aria-label="Schedules "]');
   await page.click(
@@ -82,8 +92,12 @@ async function runPickleballAutobooker(
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
   await finishButton.click();
-  logger.log('Closing browser. Success!');
+  await page.getByText("Your reservation is complete.").isVisible();
 
+  //navigate to View All Reservations to allow async booking
+  // processes to finish so booking completes. 
+  await page.getByRole('link', { name: 'View All Reservations', exact: true }).click();  
+  logger.log('Closing browser. Success!');
   await browser.close();
 }
 

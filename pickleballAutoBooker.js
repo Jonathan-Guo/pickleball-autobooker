@@ -18,6 +18,20 @@ const dayMap = {
   Saturday: 6,
 };
 
+
+async function clear_screen() {
+  // Close cookie preferences if visible
+  if (await page.locator('#onetrust-close-btn-container > button').isVisible()) {
+      await page.locator('#onetrust-close-btn-container > button').click();
+  }
+
+  // Close alert notification if visible
+  const alertBtn = page.locator('#alert-notification-edb12dcf-fe52-4c04-9d29-fd99ccce5280 > div > button');
+  if (await alertBtn.isVisible()) {
+      await alertBtn.click();
+  }
+}
+
 /**
  * Automates booking a Pickleball Open Play class.
  * @param {string} dayName - Day of the week, e.g. "Monday"
@@ -47,17 +61,8 @@ async function runPickleballAutobooker(
     `https://my.lifetime.life/clubs/va/${clubLocation}.html`
   );
   logger.log('Navigated to Lifetime website at', clubLocation);
-
-  // Close cookie preferences if visible
-  if (await page.locator('#onetrust-close-btn-container > button').isVisible()) {
-      await page.locator('#onetrust-close-btn-container > button').click();
-  }
-
-  // Close alert notification if visible
-  const alertBtn = page.locator('#alert-notification-edb12dcf-fe52-4c04-9d29-fd99ccce5280 > div > button');
-  if (await alertBtn.isVisible()) {
-      await alertBtn.click();
-  }
+  await clear_screen();
+  
   // navigate to pickleball open play schedule next week
   await page.click('a.nav-link.dropdown-toggle[aria-label="Schedules "]');
   await page.click(
@@ -81,6 +86,7 @@ async function runPickleballAutobooker(
 
   logger.log('Found classBlock info with startTime', startTime, ampm, className);
   // click reserve button
+  await clear_screen();
   const reserveButton = page
     .locator('button[data-testid="reserveButton"]')
     .nth(1);
@@ -89,6 +95,7 @@ async function runPickleballAutobooker(
   logger.log('Clicked reserve button');
 
   // click finish button
+  await clear_screen();
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
   await finishButton.click({ force: true });

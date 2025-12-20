@@ -1,0 +1,25 @@
+name: Scheduled Pickleball Autobooker
+
+on:
+  schedule:
+    # Runs at 00:00 every day (UTC)
+    - cron: '30 22 * * 2'
+  workflow_dispatch: # Allows manual triggering for testing
+
+jobs:
+  run-npm-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use your project's version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run task
+        run: npm start

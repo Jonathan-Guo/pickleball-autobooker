@@ -19,7 +19,7 @@ const dayMap = {
 };
 
 
-async function clear_screen() {
+async function clear_screen(page) {
   // Close cookie preferences if visible
   if (await page.locator('#onetrust-close-btn-container > button').isVisible()) {
       await page.locator('#onetrust-close-btn-container > button').click();
@@ -86,7 +86,7 @@ async function runPickleballAutobooker(
 
   logger.log('Found classBlock info with startTime', startTime, ampm, className);
   // click reserve button
-  await clear_screen();
+  await clear_screen(page);
   const reserveButton = page
     .locator('button[data-testid="reserveButton"]')
     .nth(1);
@@ -95,7 +95,7 @@ async function runPickleballAutobooker(
   logger.log('Clicked reserve button');
 
   // click finish button
-  await clear_screen();
+  await clear_screen(page);
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
   await finishButton.click({ force: true });

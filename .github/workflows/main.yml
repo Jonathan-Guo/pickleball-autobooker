@@ -2,15 +2,20 @@ name: Scheduled Pickleball Autobooker
 
 on:
   schedule:
-    # Runs at 00:00 every day (UTC)
+    # Runs at 22:30 UTC every Tuesday
     - cron: '30 22 * * 2'
-  workflow_dispatch: # Allows manual triggering for testing
+  workflow_dispatch: 
 
 jobs:
   book-court:
     runs-on: ubuntu-latest
-    
-    # Optional: Set the base directory for all 'run' steps in this job
+    strategy:
+      # Use fail-fast: false so if one person's booking fails, others still continue
+      fail-fast: false
+      matrix:
+        # Add a number for every account you want to run
+        account_id: [1, 2]
+
     defaults:
       run:
         working-directory: ./pickleball-autobooker
@@ -19,7 +24,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          ref: main # Explicitly ensures it pulls from the main branch
+          ref: main
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -31,10 +36,13 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      # If you are using Playwright, you may need to install browser binaries
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Run Auto Booker
-        # Runs the 'start' script defined in your package.json
         run: npm start
         env:
-          # If your script requires login info, add secrets in your Repo Settings
-          USER_EMAIL: ${{ secrets.USER_EMAIL }}
-          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          # Dynamically pulls USER_1_EMAIL, USER_2_EMAIL, etc. based on the matrix index
+          USER_EMAIL: ${{ secrets[format('USER_{0}_EMAIL', matrix.account_id)] }}
+          USER_PASSWORD: ${{ secrets[format('USER_{0}_PASSWORD', matrix.account_id)] }}

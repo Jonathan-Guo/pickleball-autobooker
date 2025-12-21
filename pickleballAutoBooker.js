@@ -19,39 +19,8 @@ const dayMap = {
 };
 
 
-async function clear_screen(page) {
-  try {
-    // 1. Physically delete the cookie banner and its background filters from the HTML
-    await page.evaluate(() => {
-      const selectors = [
-        '#onetrust-consent-sdk',        // The main cookie container
-        '#onetrust-banner-sdk',         // Alternative banner ID
-        '.onetrust-pc-dark-filter',     // The "grey out" overlay
-        '.ot-sdk-row',                  // Specific SDK rows
-        '#onetrust-style'               // The CSS that might be locking the scroll
-      ];
-      
-      selectors.forEach(selector => {
-        const el = document.querySelector(selector);
-        if (el) {
-          el.remove(); // This removes it from the browser memory for this session
-        }
-      });
-
-      // Re-enable scrolling on the body just in case the banner locked it
-      document.body.style.overflow = 'auto';
-    });
-
-    // 2. Handle the specific alert notification button if it exists
-    const alertBtn = page.locator('button[aria-label="Close alert"], #alert-notification-edb12dcf-fe52-4c04-9d29-fd99ccce5280 button');
-    if (await alertBtn.count() > 0 && await alertBtn.first().isVisible()) {
-        await alertBtn.first().click();
-    }
-    
-    logger.log('DOM cleared: OneTrust and alerts removed.');
-  } catch (err) {
-    logger.log('Clear screen skipped or failed (non-critical):', err.message);
-  }
+async function clear_banners(page) {
+  await page.locator('#onetrust-reject-all-handler').click();
 }
 
 /**
@@ -83,7 +52,8 @@ async function runPickleballAutobooker(
     `https://my.lifetime.life/clubs/va/${clubLocation}.html`
   );
   logger.log('Navigated to Lifetime website at', clubLocation);
-  await clear_screen(page);  
+  await clear_banners(page);
+
   // navigate to pickleball open play schedule next week
   await page.click('a.nav-link.dropdown-toggle[aria-label="Schedules "]');
   await page.click(
@@ -107,7 +77,6 @@ async function runPickleballAutobooker(
 
   logger.log('Found classBlock info with startTime', startTime, ampm, className);
   // click reserve button
-  await clear_screen(page);
   const reserveButton = page
     .locator('button[data-testid="reserveButton"]')
     .nth(1);
@@ -116,10 +85,9 @@ async function runPickleballAutobooker(
   logger.log('Clicked reserve button');
 
   // click finish button
-  await clear_screen(page);
   const finishButton = page.locator('button[data-testid="finishBtn"]');
   await finishButton.waitFor({ state: "visible", timeout: 0 });
-  await finishButton.click({force: true});
+  await finishButton.click();
   await page.getByText("Your reservation is complete.").isVisible();
 
   //navigate to View All Reservations to allow async booking

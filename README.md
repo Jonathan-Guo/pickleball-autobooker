@@ -62,3 +62,21 @@ LIFETIME_PASSWORD={your password}
 ```bash
 npm start
 ```
+
+
+
+
+## Cron Job Setup 🕰️
+To take advantage of signing up for the desired session immediately after signups open, you will need to add your Lifetime username and password as secrets to Github Action Settings. This can be done via 2 ways: 
+
+1) Admin privilege adds secrets via console
+2) User with write access to repo with the following commands: 
+
+`gh secret set USER_<X>_USERNAME --body "<example_username>"`
+
+`gh secret set USER_<X>_PASSWORD --body "<example_password>"`
+
+
+Replace `X` with the appropriate number. If you are the second person adding their creds, the number is `2`. 
+
+
